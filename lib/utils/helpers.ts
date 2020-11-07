@@ -204,6 +204,8 @@ function getApplication(
 	) as Promise<ApplicationWithDeviceType>;
 }
 
+const second = 1000; // 1000 milliseconds
+const minute = 60 * second;
 export const delay = promisify(setTimeout);
 
 /**
@@ -213,30 +215,48 @@ export const delay = promisify(setTimeout);
  * retrying. Wait delayMs before the first retry, multiplying the wait
  * by backoffScaler for each further attempt.
  * @param func: The function to call and, if needed, retry calling
- * @param times: How many times to retry calling func()
+ * @param maxAttempts: How many times (max) to try calling func().
+ * func() will always be called at least once.
  * @param label: Label to include in the retry log message
- * @param startingDelayMs: How long to wait before the first retry
+ * @param initialDelayMs: How long to wait before the first retry
  * @param backoffScaler: Multiplier to previous wait time
- * @param count: Used "internally" for the recursive calls
+ * @param maxSingleDelayMs: Maximum interval between retries
  */
-export async function retry<T>(
-	func: () => T,
-	times: number,
-	label: string,
-	startingDelayMs = 1000,
+export async function retry<T>({
+	func,
+	maxAttempts,
+	label,
+	initialDelayMs = 1000,
 	backoffScaler = 2,
-): Promise<T> {
-	for (let count = 0; count < times - 1; count++) {
+	maxSingleDelayMs = 1 * minute,
+}: {
+	func: () => T;
+	maxAttempts: number;
+	label: string;
+	initialDelayMs?: number;
+	backoffScaler?: number;
+	maxSingleDelayMs?: number;
+}): Promise<T> {
+	let delayMs = initialDelayMs;
+	for (let count = 0; count < maxAttempts - 1; count++) {
+		const lastAttemptMs = Date.now();
 		try {
 			return await func();
 		} catch (err) {
-			const delayMS = backoffScaler ** count * startingDelayMs;
+			if (count) {
+				// use Math.max to work around system time changes, e.g. DST
+				const elapsedMs = Math.max(0, Date.now() - lastAttemptMs);
+				// reduce delayMs by the time elapsed since the last attempt
+				delayMs = Math.max(initialDelayMs, delayMs - elapsedMs);
+				// increase delayMs by the backoffScaler factor
+				delayMs = Math.min(maxSingleDelayMs, delayMs * backoffScaler);
+			}
 			console.log(
-				`Retrying "${label}" after ${(delayMS / 1000).toFixed(2)}s (${
+				`Retrying "${label}" after ${(delayMs / 1000).toFixed(1)}s (${
 					count + 1
-				} of ${times}) due to: ${err}`,
+				} of ${maxAttempts - 1}) due to: ${err}`,
 			);
-			await delay(delayMS);
+			await delay(delayMs);
 		}
 	}
 	return await func();
