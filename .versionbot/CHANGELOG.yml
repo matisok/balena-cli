@@ -1,4 +1,27 @@
 - commits:
+    - subject: Fix majority of comments
+      hash: 795d48b4ed921a20f0444c48ff9b8924c781f97d
+      body: ''
+      footer:
+        Signed-off-by: Marios Balamatsias <mbalamatsias@gmail.com>
+        signed-off-by: Marios Balamatsias <mbalamatsias@gmail.com>
+      author: Marios Balamatsias
+      nested: []
+    - subject: 'device: Add deactivate command'
+      hash: a76ccecca607b52c6568d1442abf9145e6df57b9
+      body: ''
+      footer:
+        Resolves: '#1545'
+        resolves: '#1545'
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Marios Balamatsias <mbalamatsias@gmail.com>
+        signed-off-by: Marios Balamatsias <mbalamatsias@gmail.com>
+      author: Marios Balamatsias
+      nested: []
+  version: 13.0.0
+  date: 2020-12-03T16:42:30.635Z
+- commits:
     - subject: 'scan: Print production devices'' info on scan'
       hash: 7d5a64f59a47c3a051fb2cbe9e45a71029cca694
       body: ''
