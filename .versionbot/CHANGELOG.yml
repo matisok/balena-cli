@@ -1,4 +1,33 @@
 - commits:
+    - subject: 'Livepush, logs: Automatically reconnect on ''Connection to device lost'''
+      hash: 224b81f8a6010005e672e14d8e1ece1849fbeb7e
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Paulo Castro
+      nested: []
+    - subject: 'logs: Fix CTRL-C ignored on Windows MSYS / Git for Windows'
+      hash: 8f5ca5fd7cce1690af13f3f697cbd900c11a652b
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Paulo Castro
+      nested: []
+    - subject: 'livepush: Fix process not exiting on "Connection to device lost"'
+      hash: 6b98feaf9aa0dfdae36c6e2de391f76d4f78843e
+      body: ''
+      footer:
+        Resolves: '#1828'
+        resolves: '#1828'
+        Change-type: patch
+        change-type: patch
+      author: Paulo Castro
+      nested: []
+  version: 12.30.0
+  date: 2020-12-03T01:19:56.696Z
+- commits:
     - subject: 'scan: Print production devices'' info on scan'
       hash: 7d5a64f59a47c3a051fb2cbe9e45a71029cca694
       body: ''
